@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "WhatsApp Auto Sender",
+  "version": "1.0.0",
+  "description": "Automate sending messages to multiple WhatsApp contacts from Excel data",
+  "permissions": ["scripting", "activeTab", "storage"],
+  "host_permissions": ["https://web.whatsapp.com/*"],
+  "background": {
+    "service_worker": "src/background.js"
+  },
+  "action": {
+    "default_popup": "src/popup.html",
+    "default_title": "WhatsApp Auto Sender"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://web.whatsapp.com/*"],
+      "js": ["src/utils/logger.js", "src/content-script.js"],
+      "run_at": "document_end"
+    }
+  ]
+}

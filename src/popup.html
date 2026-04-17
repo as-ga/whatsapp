@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WhatsApp Auto Sender</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>WhatsApp Auto Sender</h1>
+        <p class="subtitle">Automate message sending from Excel data</p>
+      </div>
+
+      <!-- Tab Navigation -->
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="upload">📤 Upload</button>
+        <button class="tab-btn" data-tab="configure">⚙️ Configure</button>
+        <button class="tab-btn" data-tab="progress">📊 Progress</button>
+        <button class="tab-btn" data-tab="logs">📋 Logs</button>
+      </div>
+
+      <!-- Upload Tab -->
+      <div id="upload" class="tab-content active">
+        <div class="section">
+          <h2>Upload Excel File</h2>
+          <div class="file-input-wrapper">
+            <input type="file" id="excelFile" accept=".xlsx,.xls,.csv" />
+            <label for="excelFile" class="file-input-label">
+              <span>📁 Choose Excel File</span>
+            </label>
+          </div>
+          <p class="help-text">Required columns: name, phone, is_msg_send</p>
+        </div>
+
+        <div class="section" id="uploadStatus" style="display: none">
+          <h3>Upload Status</h3>
+          <div class="status-message" id="uploadMessage"></div>
+          <div class="data-preview">
+            <h4>Data Preview</h4>
+            <table id="previewTable">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Phone</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="previewBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Configure Tab -->
+      <div id="configure" class="tab-content">
+        <div class="section">
+          <h2>Message Configuration</h2>
+          <div class="form-group">
+            <label for="messageTemplate">Message Template</label>
+            <textarea
+              id="messageTemplate"
+              placeholder="Hello {name}, this is an automated message."
+            >
+{name}
+</textarea
+            >
+            <small>Use {name} as placeholder for contact name</small>
+          </div>
+
+          <div class="form-group">
+            <label for="delayMs">Delay between messages (ms)</label>
+            <input
+              type="number"
+              id="delayMs"
+              min="1000"
+              max="10000"
+              value="2000"
+              step="500"
+            />
+            <small>Minimum delay to avoid rate limiting</small>
+          </div>
+
+          <div class="form-group">
+            <label for="retryAttempts">Retry Attempts</label>
+            <input type="number" id="retryAttempts" min="1" max="5" value="3" />
+            <small>Number of times to retry failed messages</small>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Control Panel</h2>
+          <div class="button-group">
+            <button id="startBtn" class="btn btn-primary">
+              ▶️ Start Automation
+            </button>
+            <button id="pauseBtn" class="btn btn-warning" disabled>
+              ⏸️ Pause
+            </button>
+            <button id="resumeBtn" class="btn btn-success" disabled>
+              ▶️ Resume
+            </button>
+            <button id="stopBtn" class="btn btn-danger" disabled>
+              ⏹️ Stop
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Progress Tab -->
+      <div id="progress" class="tab-content">
+        <div class="section">
+          <h2>Automation Progress</h2>
+          <div class="progress-info">
+            <div class="stat-box">
+              <div class="stat-label">Total</div>
+              <div class="stat-value" id="statTotal">0</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">Sent ✓</div>
+              <div class="stat-value success" id="statSent">0</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">Failed ✗</div>
+              <div class="stat-value error" id="statFailed">0</div>
+            </div>
+          </div>
+
+          <div class="progress-bar-container">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+          <p class="progress-text" id="progressText">No automation running</p>
+        </div>
+
+        <div class="section">
+          <h2>Status</h2>
+          <div id="statusIndicator" class="status-idle">
+            <span id="statusText">Idle</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Logs Tab -->
+      <div id="logs" class="tab-content">
+        <div class="section">
+          <h2>Extension Logs</h2>
+          <div class="log-controls">
+            <button id="exportLogsBtn" class="btn btn-secondary">
+              📥 Export Logs
+            </button>
+            <button id="clearLogsBtn" class="btn btn-secondary">
+              🗑️ Clear Logs
+            </button>
+          </div>
+          <div id="logContainer" class="log-container">
+            <p class="help-text">No logs yet</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="./utils/logger.js"></script>
+    <script src="./utils/excel-parser.js"></script>
+    <script src="./utils/message-queue.js"></script>
+    <script src="./popup.js"></script>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+{
+  "name": "WhatsApp Auto Sender",
+  "short_name": "WA Sender",
+  "description": "Automate WhatsApp message sending from Excel data",
+  "version": "1.0.0"
+}
